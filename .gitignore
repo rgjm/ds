@@ -1,0 +1,11 @@
+# Track only scripts and docs; ignore data, venvs, outputs
+*
+!*/
+!.gitignore
+!*.py
+!*.R
+!*.sh
+!README.md
+.venv/
+__pycache__/
+raw/
