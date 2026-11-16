@@ -31,6 +31,25 @@ POA (postcode), CED/SED (federal/state electorate), SUA, UCL, RA, SOS, SOSR.
 
 The database also opens in any SQLite tool (DB Browser for SQLite, DBeaver, DuckDB, or pandas).
 
-## Rebuilding
+## Setup / rebuilding
 
-`python3 -m venv .venv && .venv/bin/pip install openpyxl && .venv/bin/python build_db.py` (takes ~30 min), then `.venv/bin/python add_hierarchy.py` (needs `raw/{MB,SAL,POA,LGA}_2021_AUST.xlsx` from the ABS ASGS allocation files).
+The database and raw files are not in git. To rebuild from scratch:
+
+```sh
+cd abs_census
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+
+# Data (CC BY 4.0, Australian Bureau of Statistics), ~700 MB total, into raw/
+mkdir -p raw && cd raw
+curl -LO https://www.abs.gov.au/census/find-census-data/datapacks/download/2021_GCP_all_for_AUS_short-header.zip
+ASGS=https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/allocation-files
+for f in MB SAL POA LGA; do curl -LO $ASGS/${f}_2021_AUST.xlsx; done
+cd ..
+
+.venv/bin/python build_db.py        # builds census_2021.db, ~30 min
+.venv/bin/python add_hierarchy.py   # adds gccsa / gccsa_share to geo
+```
+
+Landing pages if the direct links move: [Census DataPacks](https://www.abs.gov.au/census/find-census-data/datapacks)
+(2021, General Community Profile, all geographies, short header) and
+[ASGS Edition 3 allocation files](https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/allocation-files).

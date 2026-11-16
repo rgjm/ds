@@ -3,6 +3,26 @@
 Logistic regression (binomial GLM, logit link) predicting diabetes from the Pima Indians Diabetes
 dataset (768 women aged 21+, NIDDK via UCI; `pima-indians-diabetes.csv`, column notes in `.names`).
 
+## Setup
+
+The data, fitted models and results files are not in git. To rebuild from scratch:
+
+```sh
+cd pima_glm
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+
+# Data: 768 rows, no header row (mirror of the original UCI file)
+curl -L -o pima-indians-diabetes.csv https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv
+curl -LO https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names
+
+.venv/bin/python glm.py          > results.txt              # also writes pima_glm.pickle
+.venv/bin/python compare_glms.py > compare_results.txt
+.venv/bin/python bmi_splines.py  > bmi_spline_results.txt   # also writes bmi_spline.png
+.venv/bin/python xgb_model.py    > xgb_results.txt          # also writes pima_xgb.json
+```
+
+## Scripts
+
 ```sh
 .venv/bin/python glm.py     # fits, evaluates, writes pima_glm.pickle; output saved in results.txt
 ```

@@ -6,6 +6,8 @@
 !*.R
 !*.sh
 !README.md
+!CLAUDE.md
+!requirements.txt
 .venv/
 __pycache__/
 raw/
